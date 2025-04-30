@@ -28,4 +28,5 @@ private:
 	class UCameraComponent* Camera; // Actor에 포함되기 때문에 전방 선언 필요 없음
 
 	void Move(float Value);
+	void Turn(float Value);
 };

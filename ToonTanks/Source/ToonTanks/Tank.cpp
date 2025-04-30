@@ -24,9 +24,20 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
 }
 
 void ATank::Move(float Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Value: %f"), Value);
+	FVector DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.X = Value;
+	AddActorLocalOffset(DeltaLocation);
+}
+
+void ATank::Turn(float Value)
+{
+	//FVector DeltaLocation(0.f);
+	//DeltaLocation.X = 2.f;
+	//AddActorLocalOffset(DeltaLocation);
+	//UE_LOG(LogTemp, Warning, TEXT("Value: %f"), Value);
 }
