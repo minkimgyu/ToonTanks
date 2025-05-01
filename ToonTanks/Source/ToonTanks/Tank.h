@@ -20,6 +20,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArm; // 전방 선언
@@ -27,6 +31,19 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UCameraComponent* Camera; // Actor에 포함되기 때문에 전방 선언 필요 없음
 
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float Speed;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float TurnRate;
+
 	void Move(float Value);
 	void Turn(float Value);
+
+	APlayerController* PlayerControllerRef;
+
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 };

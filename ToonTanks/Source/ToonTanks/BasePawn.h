@@ -15,32 +15,9 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 
-
-	UPROPERTY(VisibleInstanceOnly)
-	int32 VisibleInstanceOnlyInt = 12;
-
-	UPROPERTY(EditAnywhere)
-	float Test = 32.f;
-
-	UPROPERTY(EditDefaultsOnly)
-	int32 EditDefaultOnlyInt = 64;
-
-	UPROPERTY(EditInstanceOnly)
-	int32 EditInstanceOnlyInt = 32;
-
-	UPROPERTY(VisibleDefaultsOnly)
-	int32 VisibleDefaultsOnlyInt = 32;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float Test2 = 64.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Test3 = 32.f;
-
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void RotateTurret(FVector LookAtTarget);
+	void Fire();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -55,15 +32,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint; // 투사체 생성 포인트
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Super Duper Variables", meta = (AllowPrivateAccess = "true"))
-	//int32 VisibleAnywhereInt = 12;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Super Duper Variables", meta = (AllowPrivateAccess = "true"))
-	//int32 EditAnywhereInt = 12;
-
-
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<class AProjectile> ProjectileClass;
 };

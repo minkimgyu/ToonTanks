@@ -3,6 +3,9 @@
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+#include "Projectile.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -23,15 +26,38 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 }
 
-// Called when the game starts or when spawned
-void ABasePawn::BeginPlay()
+void ABasePawn::RotateTurret(FVector LookAtTarget)
 {
-	Super::BeginPlay();
-	
+	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
+	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f); // 이렇게 해도 된다.
+
+	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
+	FRotator interpRotator = FMath::RInterpTo(
+		TurretMesh->GetComponentRotation(), 
+		LookAtRotation, 
+		deltaTime, 
+		25.f
+	);
+
+	TurretMesh->SetWorldRotation(interpRotator);
 }
 
-// Called every frame
-void ABasePawn::Tick(float DeltaTime)
+void ABasePawn::Fire()
 {
-	Super::Tick(DeltaTime);
+	FVector ProjectileSpawnPointLocation = ProjectileSpawnPoint->GetComponentLocation();
+	FRotator ProjectileSpawnPointRotation = ProjectileSpawnPoint->GetComponentRotation();
+
+	GetWorld()->SpawnActor<AProjectile>(
+		ProjectileClass, 
+		ProjectileSpawnPointLocation,
+		ProjectileSpawnPointRotation);
+
+	DrawDebugSphere(
+		GetWorld(),
+		ProjectileSpawnPointLocation, // 중심
+		25.f, // 반지름
+		12, // 세그먼트 수
+		FColor::Red, // 색상
+		false, // 선 여부
+		3.f); // 수명
 }
