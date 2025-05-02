@@ -22,6 +22,17 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Movement")
 	class UProjectileMovementComponent* ProjectileMovementComponent; // Actor에 포함되기 때문에 전방 선언 필요 없음
 
+	UFUNCTION()
+	void OnHit(
+		UPrimitiveComponent* HitComp, 
+		AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, 
+		FVector NormalImpluse,
+		const FHitResult& Hit);
+
+	UPROPERTY(EditAnywhere)
+	float Damage = 50.f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

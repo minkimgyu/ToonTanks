@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -19,11 +20,32 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent->InitialSpeed = 1300.f;
 }
 
+void AProjectile::OnHit(
+	UPrimitiveComponent* HitComp, 
+	AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, 
+	FVector NormalImpluse, 
+	const FHitResult& Hit)
+{
+	AActor* MyOwner = GetOwner();
+	if (MyOwner == nullptr) return;
+
+	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
+	auto DamageTypeClass = UDamageType::StaticClass(); // 따로 지정하지 않을 것이기 때문에 StaticClass를 사용한다.
+
+	// 자신이 아니고 자신의 오너(BasePawn)이 아닌 경우에만 공격 적용
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
+		Destroy();
+	}
+}
+
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
 // Called every frame

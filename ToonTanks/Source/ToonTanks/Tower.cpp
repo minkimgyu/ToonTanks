@@ -13,6 +13,12 @@ void ATower::CheckFireCondition()
 	}
 }
 
+void ATower::HandleDestruction()
+{
+	Super::HandleDestruction();
+	Destroy();
+}
+
 bool ATower::InFireRange()
 {
 	if (Tank)
