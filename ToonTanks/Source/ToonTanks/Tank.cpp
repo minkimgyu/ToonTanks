@@ -37,14 +37,14 @@ void ATank::BeginPlay()
 	Super::BeginPlay();
 	TankPlayerController = Cast<APlayerController>(GetController());
 
-	DrawDebugSphere(
-		GetWorld(),
-		GetActorLocation() + FVector(0.f, 0.f, 200.f), // 중심
-		100.f, // 반지름
-		12, // 세그먼트 수
-		FColor::Red, // 색상
-		true, // 선 여부
-		30.f); // 수명
+	//DrawDebugSphere(
+	//	GetWorld(),
+	//	GetActorLocation() + FVector(0.f, 0.f, 200.f), // 중심
+	//	100.f, // 반지름
+	//	12, // 세그먼트 수
+	//	FColor::Red, // 색상
+	//	true, // 선 여부
+	//	30.f); // 수명
 }
 
 void ATank::Move(float Value)

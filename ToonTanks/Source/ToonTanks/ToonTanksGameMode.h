@@ -21,6 +21,20 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartGame();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bWonGame);
+
 private:
 	class ATank* Tank;
+	class AToonTankPlayerController* ToonTankPlayerController;
+	
+	int32 TargetTowers = 0; // 타워 개수
+	int32 GetTargetTowerCount();
+
+	float StartDelay = 3.f;
+
+	void HandleGameStart();
 };

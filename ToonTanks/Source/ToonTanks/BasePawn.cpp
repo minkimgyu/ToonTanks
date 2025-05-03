@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Projectile.h"
+#include "Particles/ParticleSystem.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -28,7 +29,22 @@ ABasePawn::ABasePawn()
 
 void ABasePawn::HandleDestruction()
 {
+	IsAlive = false;
 
+	if (DeathParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+	}
+
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+	}
+
+	if (DeathCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}
 }
 
 void ABasePawn::RotateTurret(FVector LookAtTarget)
@@ -59,12 +75,12 @@ void ABasePawn::Fire()
 
 	Projectile->SetOwner(this);
 
-	DrawDebugSphere(
-		GetWorld(),
-		ProjectileSpawnPointLocation, // 중심
-		25.f, // 반지름
-		12, // 세그먼트 수
-		FColor::Red, // 색상
-		false, // 선 여부
-		3.f); // 수명
+	//DrawDebugSphere(
+	//	GetWorld(),
+	//	ProjectileSpawnPointLocation, // 중심
+	//	25.f, // 반지름
+	//	12, // 세그먼트 수
+	//	FColor::Red, // 색상
+	//	false, // 선 여부
+	//	3.f); // 수명
 }
